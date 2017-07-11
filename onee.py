@@ -19,7 +19,10 @@ def compress(inlet):
     """Creates a compression script and runs it."""
     commands = [ ]
     file_parts = inlet.split('/')
-    # TODO Create necessary folder
+    box = ''
+    for part in file_parts:
+        box += part + '/'
+        commands.append('mkdir ' + box)
     commands.append('cd box')
     for part in file_parts[:-1]:
         commands.append('cd ' + part)
@@ -44,8 +47,11 @@ def decompress(inlet):
     commands.append('mv %s %s' % (outlet, dots))
     for _ in range(len(file_parts)):
         commands.append('cd ..')
-    # TODO Create necessary folders
-    commands.append('mv %s box' % (outlet))
+    box = 'box/'
+    for part in file_parts[0:-1]:
+        box += part + '/'
+        commands.append('mkdir ' + box)
+    commands.append('mv %s %s' % (outlet, box))
     execute(commands)
 
 if __name__ == '__main__':
